@@ -16,11 +16,18 @@
 import cors from './Cors';
 
 
+/**
+ * Authentication
+ */
+ import authentication from './Authentication';
+
+
 
 /**
  * @var array 
  * Middleware Order Setting
  */
 export default [
-  cors
+  cors,
+  authentication
 ];

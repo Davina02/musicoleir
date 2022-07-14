@@ -2,27 +2,27 @@ import { DataTypes } from 'sequelize';
 import { Model, Column, Table, Default } from 'sequelize-typescript';
 
 /**
- * UserInterface
+ * CustomerInterface
  *
  * @hidable_parameters
  *  password
  *  is_delete
  */
-export interface UserItf {
+export interface CustomerItf {
   id?: number | null
   full_name: string
-  username: string
+  email: string
   password?: string | null
   is_deleted?: number | null
 }
 
 @Table({
-    tableName    : 'users',
+    tableName    : 'customers',
     timestamps   : true,
     paranoid    : true,
     underscored  : true
 })
-class User extends Model implements UserItf {
+class Customer extends Model implements CustomerItf {
 
   /**
    * @var array
@@ -51,10 +51,10 @@ class User extends Model implements UserItf {
 
   @Column({
     allowNull: false,
-    field: "username",
+    field: "email",
     type: DataTypes.STRING(100)
   })
-  username!: string;
+  email!: string;
 
   @Column({
     allowNull: false,
@@ -94,10 +94,10 @@ class User extends Model implements UserItf {
     type: DataTypes.VIRTUAL(DataTypes.STRING)
   })
   get some_virtual_attributes(): string {
-    return `${this.getDataValue('full_name')} ${this.getDataValue('username')}`;
+    return `${this.getDataValue('full_name')} ${this.getDataValue('email')}`;
   }
 
 
 }
 
-export default User;
+export default Customer;

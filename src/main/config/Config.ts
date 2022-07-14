@@ -41,6 +41,20 @@ export default {
       password  : process.env.DB_PASSWORD ?? ''
     }
 
-  }
+  },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Authorization Secret Key Configuration
+  |--------------------------------------------------------------------------
+  |
+  | Here you may specify and configure Authorization Secret Key.
+  | In this case below, is using JWT.
+  |
+  */
+  jwt: {
+    secret_key  : process.env.JWT_SECRET ?? "jwtsecret"
+
+  },
   
 }

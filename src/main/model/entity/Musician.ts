@@ -1,28 +1,26 @@
 import { DataTypes } from 'sequelize';
-import { Model, Column, Table, Default } from 'sequelize-typescript';
+import { Model, Column, Table, Default, HasOne } from 'sequelize-typescript';
+import Album from './Album';
 
 /**
- * UserInterface
+ * MusicianInterface
  *
  * @hidable_parameters
- *  password
  *  is_delete
  */
-export interface UserItf {
+ export interface MusicianItf {
   id?: number | null
-  full_name: string
-  username: string
-  password?: string | null
+  name: string
   is_deleted?: number | null
 }
 
 @Table({
-    tableName    : 'users',
+    tableName    : 'musicians',
     timestamps   : true,
     paranoid    : true,
     underscored  : true
 })
-class User extends Model implements UserItf {
+class Musician extends Model implements MusicianItf {
 
   /**
    * @var array
@@ -30,7 +28,6 @@ class User extends Model implements UserItf {
    *  Hide attributes with variable names below
    */
   private hidden = [
-    'password',
     'is_deleted'
   ];
 
@@ -44,25 +41,10 @@ class User extends Model implements UserItf {
 
   @Column({
     allowNull: false,
-    field: "full_name",
+    field: "name",
     type: DataTypes.STRING(100)
   })
-  full_name!: string
-
-  @Column({
-    allowNull: false,
-    field: "username",
-    type: DataTypes.STRING(100)
-  })
-  username!: string;
-
-  @Column({
-    allowNull: false,
-    field: "password",
-    comment: "Make sure this is encrypted!!!",
-    type: DataTypes.TEXT
-  })
-  password?: string | null;
+  name!: string
 
   @Default(0)
   @Column({
@@ -88,16 +70,11 @@ class User extends Model implements UserItf {
   }
 
   /**
-   * Virtual Attributes
+   * Relationship
    */
-  @Column({
-    type: DataTypes.VIRTUAL(DataTypes.STRING)
-  })
-  get some_virtual_attributes(): string {
-    return `${this.getDataValue('full_name')} ${this.getDataValue('username')}`;
-  }
-
+  @HasOne(() => Album, "musician_id")
+  album!: Album;
 
 }
 
-export default User;
+export default Musician;

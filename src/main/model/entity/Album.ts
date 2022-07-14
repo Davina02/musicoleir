@@ -1,28 +1,28 @@
 import { DataTypes } from 'sequelize';
-import { Model, Column, Table, Default } from 'sequelize-typescript';
+import { Model, Column, Table, Default, HasOne, BelongsTo } from 'sequelize-typescript';
+import Music from './Music';
+import Musician from './Musician';
 
 /**
- * UserInterface
+ * AlbumInterface
  *
  * @hidable_parameters
- *  password
  *  is_delete
  */
-export interface UserItf {
+ export interface AlbumItf {
   id?: number | null
-  full_name: string
-  username: string
-  password?: string | null
+  musician_id: number
+  title: string
   is_deleted?: number | null
 }
 
 @Table({
-    tableName    : 'users',
+    tableName    : 'albums',
     timestamps   : true,
     paranoid    : true,
     underscored  : true
 })
-class User extends Model implements UserItf {
+class Album extends Model implements AlbumItf {
 
   /**
    * @var array
@@ -30,7 +30,6 @@ class User extends Model implements UserItf {
    *  Hide attributes with variable names below
    */
   private hidden = [
-    'password',
     'is_deleted'
   ];
 
@@ -43,26 +42,18 @@ class User extends Model implements UserItf {
   id?: number | null;
 
   @Column({
-    allowNull: false,
-    field: "full_name",
-    type: DataTypes.STRING(100)
+    field: "musician_id",
+    type: DataTypes.INTEGER,
+    allowNull: false
   })
-  full_name!: string
+  musician_id!: number;
 
   @Column({
     allowNull: false,
-    field: "username",
+    field: "title",
     type: DataTypes.STRING(100)
   })
-  username!: string;
-
-  @Column({
-    allowNull: false,
-    field: "password",
-    comment: "Make sure this is encrypted!!!",
-    type: DataTypes.TEXT
-  })
-  password?: string | null;
+  title!: string
 
   @Default(0)
   @Column({
@@ -88,16 +79,14 @@ class User extends Model implements UserItf {
   }
 
   /**
-   * Virtual Attributes
+   * Relationship
    */
-  @Column({
-    type: DataTypes.VIRTUAL(DataTypes.STRING)
-  })
-  get some_virtual_attributes(): string {
-    return `${this.getDataValue('full_name')} ${this.getDataValue('username')}`;
-  }
+  @HasOne(() => Music, "album_id")
+  music!: Music;
 
+  @BelongsTo(() => Musician, "musician_id")
+  musician!: Musician;
 
 }
 
-export default User;
+export default Album;
