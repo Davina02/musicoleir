@@ -33,7 +33,7 @@ export interface UserRepository {
    * 
    * @return /model/entity/User
    */
-  findUserById(id: number): Promise<User>;
+  findUserById(id: number): Promise<User | null>;
 
   /**
    * findUserByUsername

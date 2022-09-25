@@ -15,8 +15,10 @@ const mainConnection = (): Sequelize => {
     config.database.main.password,
     {
       host        : config.database.main.uri,
+      port        : config.database.main.port,
       dialect     : config.database.main.dialect,
       // logging     : (... msg) => console.log(msg),
+      logging     : false,
       models      : [path.join(__dirname, "../model/entity")]
     }
   );
@@ -35,6 +37,8 @@ const mainConnection = (): Sequelize => {
           force: true,
           
           */
+
+          // force: true,
           
           "alter": {
             drop: false

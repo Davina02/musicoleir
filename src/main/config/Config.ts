@@ -16,7 +16,7 @@ export default {
   server: {
     hostname  : process.env.SERVER_HOSTNAME ?? 'localhost',
     port      : process.env.SERVER_PORT ?? 57898,
-    app       : process.env.APP_NAME ?? 'DJIM Paspor Online API',
+    app       : process.env.APP_NAME ?? 'Musicoleir API',
     env       : process.env.APP_ENV ?? 'production'
   },
 
@@ -33,9 +33,9 @@ export default {
   database: {
 
     main: {
-      dialect   : (process.env.DB_CONNECTION_DIALECT ?? "postgres") as Dialect,
+      dialect   : (process.env.DB_CONNECTION_DIALECT ?? "mysql") as Dialect,
       uri       : process.env.DB_HOSTNAME ?? "127.0.0.1",
-      port      : process.env.DB_PORT ?? "5432",
+      port      : parseInt(process.env.DB_PORT ?? "3306"),
       database  : process.env.DB_DATABASE ?? '',
       username  : process.env.DB_USERNAME ?? 'root',
       password  : process.env.DB_PASSWORD ?? ''

@@ -28,29 +28,21 @@ class AlbumRepositoryImpl implements AlbumRepository {
     return execution;
   }
 
-  findAlbumById = async(id: number): Promise<Album> =>
+  findAlbumById = async(id: number): Promise<Album | null> =>
     Album.findOne({
       where: {
         is_deleted: 0,
         id: id
       }
-    }).then(resultSet => {
-      if(resultSet === null) throw new AlbumNotFoundException();
+    }).then(resultSet => resultSet);
 
-      return resultSet;
-    });
-
-  findAlbumByTitle = async(title: string): Promise<Album> =>
+  findAlbumByTitle = async(title: string): Promise<Album | null> =>
     Album.findOne({
       where: {
         is_deleted: 0,
         title: title
       }
-    }).then(resultSet => {
-      if(resultSet === null) throw new AlbumNotFoundException();
-
-      return resultSet;
-    });
+    }).then(resultSet => resultSet);
 
   getAllAlbumByMusician = async(musician_id: number): Promise<Array<Album>> => 
     Album.findAll({

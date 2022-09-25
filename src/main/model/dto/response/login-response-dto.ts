@@ -1,5 +1,3 @@
-import { body } from 'express-validator';
-
 export class LoginResponseDTO {
   id!: number
   full_name!: string

@@ -15,9 +15,7 @@ class MusicRepositoryImpl implements MusicRepository {
         id: request.music_id,
         is_deleted: 0
       }
-    }).then(resultSet => {
-      return resultSet;
-    });
+    }).then(resultSet => resultSet);
 
     if(execution === null){
       throw new MusicNotFoundException();
@@ -31,29 +29,21 @@ class MusicRepositoryImpl implements MusicRepository {
     return execution;
   }
 
-  findMusicById = async(id: number): Promise<Music> =>
+  findMusicById = async(id: number): Promise<Music | null> =>
     Music.findOne({
       where: {
         is_deleted: 0,
         id: id
       }
-    }).then(resultSet => {
-      if(resultSet === null) throw new MusicNotFoundException();
+    }).then(resultSet => resultSet);
 
-      return resultSet;
-    });
-
-  findMusicByTitle = async(title: string): Promise<Music> =>
+  findMusicByTitle = async(title: string): Promise<Music | null> =>
     Music.findOne({
       where: {
         is_deleted: 0,
         title: title
       }
-    }).then(resultSet => {
-      if(resultSet === null) throw new MusicNotFoundException();
-
-      return resultSet;
-    });
+    }).then(resultSet => resultSet);
 
   getAllMusicByAlbum = async(album_id: number): Promise<Array<Music>> => 
     Music.findAll({

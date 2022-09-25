@@ -16,6 +16,7 @@ export default [
     
     body('title')
       .exists().withMessage('Parameter \'title\' tidak ditemukan.')
+      .not().isEmpty().withMessage('Parameter \'title\' tidak boleh berisi string kosong.')
     ,
 
     body('duration')

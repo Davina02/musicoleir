@@ -17,10 +17,10 @@ export interface JWTTokenItf {
 
 @Table(
   {
-    tableName      : 'uma_jwt_token',
-    timestamps     : false,
-    underscored    : true,
-    schema         : 'po_uma'
+    tableName    : 'tokens',
+    timestamps   : true,
+    paranoid    : true,
+    underscored  : true
   }
 )
 class JWTToken extends Model implements JWTTokenItf {  

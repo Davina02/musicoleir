@@ -9,10 +9,4 @@ export default [
     .toInt()
   ,
 
-  query('search')
-    .optional({
-      nullable: true
-    })
-    .toLowerCase()
-  ,
 ];

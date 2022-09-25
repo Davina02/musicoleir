@@ -23,7 +23,7 @@ export interface MusicRepository {
    * 
    * @return /model/entity/Music
    */
-  findMusicById(id: number): Promise<Music>;
+  findMusicById(id: number): Promise<Music | null>;
 
   /**
    * findMusicByTitle
@@ -33,7 +33,7 @@ export interface MusicRepository {
    * 
    * @return /model/entity/Music
    */
-  findMusicByTitle(title: string): Promise<Music>;
+  findMusicByTitle(title: string): Promise<Music | null>;
 
   /**
    * getAllMusicByAlbum

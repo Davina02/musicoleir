@@ -15,9 +15,7 @@ class UserRepositoryImpl implements UserRepository {
         id: request.user_id,
         is_deleted: 0
       }
-    }).then(resultSet => {
-      return resultSet;
-    });
+    }).then(resultSet => resultSet);
 
     if(execution === null){
       throw new UserNotFoundException();
@@ -40,9 +38,7 @@ class UserRepositoryImpl implements UserRepository {
         id: request.user_id,
         is_deleted: 0
       }
-    }).then(resultSet => {
-      return resultSet;
-    });
+    }).then(resultSet => resultSet);
 
     if(execution === null){
       throw new UserNotFoundException();
@@ -54,17 +50,13 @@ class UserRepositoryImpl implements UserRepository {
     return execution;
   }
 
-  findUserById = async(id: number): Promise<User> =>
+  findUserById = async(id: number): Promise<User | null> =>
     User.findOne({
       where: {
         is_deleted: 0,
         id: id
       }
-    }).then(resultSet => {
-      if(resultSet === null) throw new UserNotFoundException();
-
-      return resultSet;
-    });
+    }).then(resultSet => resultSet);
 
   findUserByUsername = async(username: string): Promise<User | null> =>
     User.findOne({
@@ -72,27 +64,30 @@ class UserRepositoryImpl implements UserRepository {
         is_deleted: 0,
         username: username
       }
-    }).then(resultSet => {
-      if(resultSet === null) throw new UserNotFoundException();
+    }).then(resultSet => resultSet);
 
-      return resultSet;
-    });
-
-  getAllUser = async(): Promise<Array<User>> => User.findAll({where: {is_deleted: 0}});
+  getAllUser = async(): Promise<User[]> => {
+    return User.findAll(
+      {where: 
+        {is_deleted: 0}
+      }).then(resultSet => {
+        return resultSet;
+      });
+    }
 
   getAllUsers = async(dto: PaginationRequestDto): Promise<AsyncManualPagination<User>> => {
     return (new AsyncManualPagination<User>().getInstance(
-      await User.findAll({
+      await User.findAndCountAll({
         where: {
           is_deleted: 0
         },
         offset: (dto.page ?? 1) * 12,
         limit: dto.perPage ?? 12,
-      }),
+      }).then(resultSet => resultSet),
       dto.link,
       dto.page!,
       dto.perPage!
-    ))
+    ));
   }
 
   createUser = async (request: CreateUserDTO): Promise<User> => {
@@ -105,7 +100,7 @@ class UserRepositoryImpl implements UserRepository {
 
   deleteUser = async(id: number): Promise<null> => {
     await User.update({
-      is_deleted: 1,
+      is_deleted: 1
     }, {
       where: {
         id: id,

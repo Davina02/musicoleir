@@ -1,6 +1,6 @@
 import { ErrorHandler } from "../../config/Exception";
 
-export class WrongCredentialException extends ErrorHandler {
+export class WrongPasswordException extends ErrorHandler {
 
   constructor() {
     super(

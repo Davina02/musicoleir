@@ -15,8 +15,18 @@ const route = express.Router();
 */
 
 import ExampleController from '../api/controller/ExampleController';
+import MusicianController from '../api/controller/MusicianController';
+import MusicController from '../api/controller/MusicController';
+import UserController from '../api/controller/UserController';
+import AlbumController from '../api/controller/AlbumController';
+import AuthController from '../api/controller/AuthController';
 
 route.use(ExampleController);
+route.use(AuthController);
+route.use(UserController);
+route.use(MusicianController);
+route.use(AlbumController);
+route.use(MusicController);
 
 /**
  * API root point. Just to make sure the API is okay.

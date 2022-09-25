@@ -24,7 +24,7 @@ export interface AlbumRepository {
    * 
    * @return /model/entity/Album
    */
-  findAlbumById(id: number): Promise<Album>;
+  findAlbumById(id: number): Promise<Album | null>;
 
   /**
    * findAlbumByTitle
@@ -34,7 +34,7 @@ export interface AlbumRepository {
    * 
    * @return /model/entity/Album
    */
-  findAlbumByTitle(title: string): Promise<Album>;
+  findAlbumByTitle(title: string): Promise<Album | null>;
 
   /**
    * getAllAlbumByMusician

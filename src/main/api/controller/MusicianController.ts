@@ -1,18 +1,13 @@
 import { Controller } from './Controller';
 import express, { Request, Response } from 'express';
 import { BaseResponse } from '../../model/dto/BaseResponse';
-import { PaginationRequestDto } from '../../model/dto/request/pagination-request-dto';
-import { ManualPagination } from '../../common/facade/ManualPagination';
 import StandardPaginationValidation from '../../common/validation/glo/StandardPaginationValidation';
-import MusicianRepositoryImpl from '../../repository/impl/MusicianRepositoryImpl';
 import { validationResult } from 'express-validator';
 import RequestValidationException from '../../common/exception/RequestValidationException';
 import CreateMusicianValidation from '../../common/validation/cms/mim/CreateMusicianValidation';
-import { NameAlreadyExistsException } from '../../common/exception/NameAlreadyExistsException';
-import Musician from '../../model/entity/Musician';
 import UpdateMusicianValidation from '../../common/validation/cms/mim/UpdateMusicianValidation';
-import { MusicianNotFoundException } from '../../common/exception/MusicianNotFoundException';
 import IdValidation from '../../common/validation/cms/IdValidation';
+import { MusicianControllerHandler } from '../../handler/MusicianControllerHandler';
 
 const app = express.Router();
 
@@ -28,19 +23,15 @@ class MusicianController extends Controller {
      * Paginate this data by 12.
      * 
      */
-    app.get("/get-all-musicians", StandardPaginationValidation, async (request: Request, response: Response) => {
+    app.get("/musician/all", StandardPaginationValidation, async (request: Request, response: Response) => {
         super.requestValidator(request);
 
-        const dto: PaginationRequestDto = ManualPagination.generatePaginationRequest(
-            request.query.page,
-            12,
-            request.protocol + "://" + request.get('host') + request.baseUrl + request.path
-        )
-
-        const resultSet = await MusicianRepositoryImpl.getAllMusicians(dto);
-
         return BaseResponse.ok(
-            resultSet,
+            await (new MusicianControllerHandler().getAllMusicians(
+                request.query.page,
+                12,
+                request.protocol + "://" + request.get('host') + request.baseUrl + request.path
+            )),
             "Success",
             response
         );
@@ -53,7 +44,7 @@ class MusicianController extends Controller {
      * This API will create musician by giving name.
      * 
      */
-    app.post("/create-musician", CreateMusicianValidation, async (request: Request, response: Response) => {
+    app.post("/musician/create", CreateMusicianValidation, async (request: Request, response: Response) => {
         /**
          * Request Validator
          */
@@ -64,28 +55,13 @@ class MusicianController extends Controller {
             );
         }
 
-        const dto = {
-            name: request.body.name
-        }
-
-        /**
-         * Check if name is already occupied
-         */
-        if (await MusicianRepositoryImpl.findMusicianByName(dto.name) != null) {
-            throw new NameAlreadyExistsException();
-        }
-
-        /**
-         * Create musician
-         */
-        const musician: Musician = await MusicianRepositoryImpl.createMusician(dto);
-
         return BaseResponse.ok(
-            musician,
+            await (new MusicianControllerHandler().createMusician(
+                request.body.name
+            )),
             "Success",
             response
         );
-
     });
 
     /**
@@ -94,16 +70,14 @@ class MusicianController extends Controller {
      * This API will update the chosen musician's name.
      * 
      */
-    app.put("/update-musician", UpdateMusicianValidation, async (request: Request, response: Response) => {
+    app.put("/musician/update", UpdateMusicianValidation, async (request: Request, response: Response) => {
         super.requestValidator(request);
 
-        const dto = {
-            musician_id: request.body.id,
-            name: request.body.name
-        }
-
         return BaseResponse.ok(
-            await MusicianRepositoryImpl.updateMusician(dto),
+            await (new MusicianControllerHandler().updateMusician(
+                request.body.id,
+                request.body.name
+            )),
             "Success",
             response
         );
@@ -118,14 +92,7 @@ class MusicianController extends Controller {
     app.delete("/delete-musician", IdValidation, async (request: Request, response: Response) => {
         super.requestValidator(request);
 
-        const id: number = request.body.id;
-        const resultSet = await MusicianRepositoryImpl.findMusicianById(id);
-
-        if (resultSet == null) {
-            throw new MusicianNotFoundException
-        }
-
-        await MusicianRepositoryImpl.deleteMusician(id);
+        await new MusicianControllerHandler().deleteMusician(request.body.id);
 
         return BaseResponse.ok(
             null,

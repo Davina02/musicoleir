@@ -24,7 +24,7 @@ export interface MusicianRepository {
    * 
    * @return /model/entity/Musician
    */
-  findMusicianById(id: number): Promise<Musician>;
+  findMusicianById(id: number): Promise<Musician | null>;
 
   /**
    * findMusicianByName
@@ -34,7 +34,7 @@ export interface MusicianRepository {
    * 
    * @return /model/entity/Musician
    */
-  findMusicianByName(name: string): Promise<Musician>;
+  findMusicianByName(name: string): Promise<Musician | null>;
 
   /**
    * getAllMusician

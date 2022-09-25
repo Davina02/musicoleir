@@ -39,7 +39,7 @@ export class BaseResponse {
     baseResponse.data = data || null;
 
     if (process.env.APP_DEBUG == "true") {
-      console.log(res);
+      // console.log(res);
     }
 
     return res
@@ -48,4 +48,25 @@ export class BaseResponse {
                 baseResponse
               ));
   }
+
+  /**
+   * custom
+   *
+   * A static function that return BaseResponse for custom purpose.
+   *
+   * @param status
+   * @param code
+   * @param message
+   * @param data
+   */
+       static custom(status: boolean, code: string, message: string, data?: any | null): BaseResponse {
+        const baseResponse = new BaseResponse();
+    
+        baseResponse.status = status;
+        baseResponse.code = code;
+        baseResponse.message = message;
+        baseResponse.data = data;
+    
+        return baseResponse;
+      }
 }

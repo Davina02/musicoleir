@@ -16,6 +16,7 @@ export default [
     
     body('username')
       .exists().withMessage('Parameter \'username\' tidak ditemukan.')
+      .not().isEmpty().withMessage('Parameter \'username\' tidak boleh berisi string kosong.')
     ,
 
     body('password')

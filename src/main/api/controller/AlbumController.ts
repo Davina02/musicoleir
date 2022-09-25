@@ -23,11 +23,11 @@ class AlbumController extends Controller {
      * Paginate this data by 12.
      * 
      */
-    app.get("/:musician_id/get-all-albums", StandardPaginationValidation, async (request: Request, response: Response) => {
+    app.get("/album/:musician_id", StandardPaginationValidation, async (request: Request, response: Response) => {
         super.requestValidator(request);
 
         return BaseResponse.ok(
-            (new AlbumControllerHandler().getAllAlbums(
+            await (new AlbumControllerHandler().getAllAlbums(
                 request.query.page,
                 12,
                 request.protocol + "://" + request.get('host') + request.baseUrl + request.path,
@@ -45,7 +45,7 @@ class AlbumController extends Controller {
      * This API will create album by giving musician's data and album's title.
      * 
      */
-    app.post("/create-album", CreateAlbumValidation, async (request: Request, response: Response) => {
+    app.post("/album/create", CreateAlbumValidation, async (request: Request, response: Response) => {
         /**
          * Request Validator
          */
@@ -57,7 +57,7 @@ class AlbumController extends Controller {
         }
 
         return BaseResponse.ok(
-            (new AlbumControllerHandler().createAlbum(
+            await (new AlbumControllerHandler().createAlbum(
                 request.body.musician_id,
                 request.body.title
             )),
@@ -73,11 +73,11 @@ class AlbumController extends Controller {
      * This API will update the chosen album's title.
      * 
      */
-    app.put("/update-album", UpdateAlbumValidation, async (request: Request, response: Response) => {
+    app.put("/album/update", UpdateAlbumValidation, async (request: Request, response: Response) => {
         super.requestValidator(request);
 
         return BaseResponse.ok(
-            (new AlbumControllerHandler().updateAlbum(
+            await (new AlbumControllerHandler().updateAlbum(
                 request.body.id,
                 request.body.title
             )),
@@ -92,14 +92,14 @@ class AlbumController extends Controller {
      * This API will delete the chosen album's data.
      * 
      */
-    app.delete("/delete-album", IdValidation, async (request: Request, response: Response) => {
+    app.delete("/album/delete", IdValidation, async (request: Request, response: Response) => {
         super.requestValidator(request);
 
+        await new AlbumControllerHandler().deleteAlbum(request.body.id);
+
         return BaseResponse.ok(
-            (new AlbumControllerHandler().deleteAlbum(
-                request.body.id
-            )),
-            "Success",
+            null,
+            "Deleted",
             response
         );
     });

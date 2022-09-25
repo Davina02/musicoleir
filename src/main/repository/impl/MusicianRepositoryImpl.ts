@@ -14,9 +14,7 @@ class MusicianRepositoryImpl implements MusicianRepository {
         id: request.musician_id,
         is_deleted: 0
       }
-    }).then(resultSet => {
-      return resultSet;
-    });
+    }).then(resultSet => resultSet);
 
     if(execution === null){
       throw new MusicianNotFoundException();
@@ -28,29 +26,21 @@ class MusicianRepositoryImpl implements MusicianRepository {
     return execution;
   }
 
-  findMusicianById = async(id: number): Promise<Musician> =>
+  findMusicianById = async(id: number): Promise<Musician | null> =>
     Musician.findOne({
       where: {
         is_deleted: 0,
         id: id
       }
-    }).then(resultSet => {
-      if(resultSet === null) throw new MusicianNotFoundException();
+    }).then(resultSet => resultSet);
 
-      return resultSet;
-    });
-
-  findMusicianByName = async(name: string): Promise<Musician> =>
+  findMusicianByName = async(name: string): Promise<Musician | null> =>
     Musician.findOne({
       where: {
         is_deleted: 0,
         name: name
       }
-    }).then(resultSet => {
-      if(resultSet === null) throw new MusicianNotFoundException();
-
-      return resultSet;
-    });
+    }).then(resultSet => resultSet);
 
   getAllMusician = async(): Promise<Array<Musician>> => Musician.findAll({where: {is_deleted: 0}});
 
